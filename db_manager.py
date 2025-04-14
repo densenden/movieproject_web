@@ -1,76 +1,100 @@
-import sqlite3
+from flask_sqlalchemy import SQLAlchemy
 from interface import DataManagerInterface
 
+db = SQLAlchemy()
+
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    whatsapp_number = db.Column(db.String(20))
+    favorites = db.relationship('UserFavorite', backref='user', lazy=True)
+
+class Movie(db.Model):
+    __tablename__ = 'movies'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    platforms = db.relationship('StreamingPlatform', secondary='movie_platforms', lazy='dynamic',
+                              backref=db.backref('movies', lazy=True))
+    categories = db.relationship('Category', secondary='movie_categories', lazy='dynamic',
+                               backref=db.backref('movies', lazy=True))
+
+class UserFavorite(db.Model):
+    __tablename__ = 'user_favorites'
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), primary_key=True)
+    watched = db.Column(db.Boolean, default=False)
+    comment = db.Column(db.Text)
+    rating = db.Column(db.Float)
+    movie = db.relationship('Movie', backref='favorites')
+
+class StreamingPlatform(db.Model):
+    __tablename__ = 'streaming_platforms'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+
+class MoviePlatform(db.Model):
+    __tablename__ = 'movie_platforms'
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), primary_key=True)
+    platform_id = db.Column(db.Integer, db.ForeignKey('streaming_platforms.id'), primary_key=True)
+
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+
+class MovieCategory(db.Model):
+    __tablename__ = 'movie_categories'
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), primary_key=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), primary_key=True)
+
 class SQLiteDataManager(DataManagerInterface):
-    def __init__(self, db_path="data/senflix.sqlite"):
-        self.conn = sqlite3.connect(db_path)
-        self.conn.row_factory = sqlite3.Row
-        self.cursor = self.conn.cursor()
+    def __init__(self, app=None):
+        if app:
+            db.init_app(app)
+            with app.app_context():
+                db.create_all()
 
     def get_all_users(self):
-        self.cursor.execute("SELECT * FROM users")
-        return self.cursor.fetchall()
+        return User.query.all()
 
     def get_user_by_id(self, user_id):
-        self.cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
-        return self.cursor.fetchone()
+        return User.query.get(user_id)
 
     def get_user_favorites(self, user_id):
-        self.cursor.execute("""
-            SELECT m.*, uf.watched, uf.comment, uf.rating
-            FROM user_favorites uf
-            JOIN movies m ON uf.movie_id = m.id
-            WHERE uf.user_id = ?
-        """, (user_id,))
-        return self.cursor.fetchall()
+        return UserFavorite.query.filter_by(user_id=user_id).all()
 
     def add_favorite(self, user_id, movie_id, watched=False, comment=None, rating=None):
-        self.cursor.execute("""
-            INSERT INTO user_favorites (user_id, movie_id, watched, comment, rating)
-            VALUES (?, ?, ?, ?, ?)
-        """, (user_id, movie_id, int(watched), comment, rating))
-        self.conn.commit()
+        favorite = UserFavorite(
+            user_id=user_id,
+            movie_id=movie_id,
+            watched=watched,
+            comment=comment,
+            rating=rating
+        )
+        db.session.add(favorite)
+        db.session.commit()
 
     def remove_favorite(self, user_id, movie_id):
-        self.cursor.execute("""
-            DELETE FROM user_favorites WHERE user_id = ? AND movie_id = ?
-        """, (user_id, movie_id))
-        self.conn.commit()
+        UserFavorite.query.filter_by(user_id=user_id, movie_id=movie_id).delete()
+        db.session.commit()
 
     def get_all_movies(self):
-        self.cursor.execute("SELECT * FROM movies")
-        return self.cursor.fetchall()
+        return Movie.query.all()
 
     def get_movie_platforms(self, movie_id):
-        self.cursor.execute("""
-            SELECT sp.name
-            FROM movie_platforms mp
-            JOIN streaming_platforms sp ON mp.platform_id = sp.id
-            WHERE mp.movie_id = ?
-        """, (movie_id,))
-        return [row["name"] for row in self.cursor.fetchall()]
+        movie = Movie.query.get(movie_id)
+        return [platform.name for platform in movie.platforms]
 
     def get_movie_categories(self, movie_id):
-        self.cursor.execute("""
-            SELECT c.name
-            FROM movie_categories mc
-            JOIN categories c ON mc.category_id = c.id
-            WHERE mc.movie_id = ?
-        """, (movie_id,))
-        return [row["name"] for row in self.cursor.fetchall()]
+        movie = Movie.query.get(movie_id)
+        return [category.name for category in movie.categories]
 
     def add_user(self, name, whatsapp_number):
-        self.cursor.execute("""
-            INSERT INTO users (name, whatsapp_number) VALUES (?, ?)
-        """, (name, whatsapp_number))
-        self.conn.commit()
-        return self.cursor.lastrowid
+        user = User(name=name, whatsapp_number=whatsapp_number)
+        db.session.add(user)
+        db.session.commit()
+        return user.id
 
     def get_user_movies(self, user_id):
-        """Return all movies associated with a user"""
-        self.cursor.execute("""
-            SELECT m.*, uf.watched, uf.comment, uf.rating
-            FROM movies m
-            LEFT JOIN user_favorites uf ON m.id = uf.movie_id AND uf.user_id = ?
-        """, (user_id,))
-        return self.cursor.fetchall()
+        return Movie.query.join(UserFavorite).filter(UserFavorite.user_id == user_id).all()
