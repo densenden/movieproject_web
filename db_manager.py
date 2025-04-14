@@ -1,4 +1,3 @@
-
 import sqlite3
 from interface import DataManagerInterface
 
@@ -66,3 +65,12 @@ class SQLiteDataManager(DataManagerInterface):
         """, (name, whatsapp_number))
         self.conn.commit()
         return self.cursor.lastrowid
+
+    def get_user_movies(self, user_id):
+        """Return all movies associated with a user"""
+        self.cursor.execute("""
+            SELECT m.*, uf.watched, uf.comment, uf.rating
+            FROM movies m
+            LEFT JOIN user_favorites uf ON m.id = uf.movie_id AND uf.user_id = ?
+        """, (user_id,))
+        return self.cursor.fetchall()
