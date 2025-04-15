@@ -5,85 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SenFlix</title>
     <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body class="bg-background text-text-primary">
-    <!-- Mobile Menu -->
-    <div class="lg:hidden fixed top-0 left-0 w-full bg-surface-dark z-50 transform -translate-y-full transition-transform duration-300" id="mobileMenu">
-        <div class="p-4">
-            <h1 class="text-2xl font-heading text-accent">SenFlix</h1>
-            <nav class="mt-4">
-                <ul>
-                    <li class="py-2">Home</li>
-                    <li class="py-2">Movies</li>
-                    <li class="py-2">TV Shows</li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-
-    <!-- Desktop Sidebar -->
-    <div class="hidden lg:block fixed left-0 top-0 w-60 h-full bg-surface-dark">
-        <div class="p-4">
-            <h1 class="text-2xl font-heading text-accent">SenFlix</h1>
-            <nav class="mt-4">
-                <ul>
-                    <li class="py-2">Home</li>
-                    <li class="py-2">Movies</li>
-                    <li class="py-2">TV Shows</li>
-                </ul>
-            </nav>
-        </div>
-    </div>
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-0 w-60 h-full bg-surface-dark p-4">
+        <h1 class="text-2xl font-bold text-accent mb-8">SenFlix</h1>
+        <nav>
+            <ul>
+                <li class="py-2 hover:text-accent cursor-pointer transition-colors">Home</li>
+                <li class="py-2 hover:text-accent cursor-pointer transition-colors">Movies</li>
+                <li class="py-2 hover:text-accent cursor-pointer transition-colors">TV Shows</li>
+            </ul>
+        </nav>
+    </aside>
 
     <!-- Main Content -->
-    <main class="lg:ml-60">
+    <main class="ml-60">
         {% for category in categories %}
-        <section class="relative">
+        <section class="mb-12">
             <!-- Hero Section -->
-            <div class="relative h-[75vh] w-full overflow-hidden">
-                <img src="{{ category.hero_image }}" alt="{{ category.name }}" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background"></div>
-                <h2 class="absolute bottom-20 left-10 text-6xl font-heading transform transition-transform duration-300" 
-                    style="transform: translateY(var(--scroll-offset, 0))">
-                    {{ category.name }}
-                </h2>
+            <div class="relative h-35vh overflow-hidden">
+                <div class="absolute inset-0">
+                    <img src="{{ category.hero_image }}" 
+                         alt="{{ category.name }}" 
+                         class="w-full h-full object-cover hero-image">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-background"></div>
+                </div>
+                <div class="relative h-full flex items-end">
+                    <h2 class="text-4xl font-bold p-8">{{ category.name }}</h2>
+                </div>
             </div>
 
-            <!-- Movie Grid -->
-            <div class="p-4">
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <!-- Movie Carousel -->
+            <div class="relative movie-carousel-container px-8 py-4">
+                <div class="movie-carousel flex space-x-4 overflow-x-auto min-h-carousel">
                     {% for movie in category.movies %}
-                    <div class="group relative bg-surface-dark p-4 rounded-lg hover:bg-surface-light transition-colors duration-300">
-                        <div class="p-4">
+                    <div class="flex-none w-64">
+                        <div class="bg-surface-dark rounded-lg p-4 h-full hover:bg-surface-light transition-colors duration-300">
                             <h3 class="text-lg font-bold mb-2">{{ movie.title }}</h3>
                             <p class="text-sm text-text-secondary">{{ movie.description }}</p>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
+                
+                <!-- Carousel Navigation -->
+                <button class="carousel-button absolute left-0 top-1/2 transform -translate-y-1/2 bg-background/80 p-2 rounded-r">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button class="carousel-button absolute right-0 top-1/2 transform -translate-y-1/2 bg-background/80 p-2 rounded-l">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
             </div>
         </section>
         {% endfor %}
     </main>
 
     <script>
-        // Parallax Effect
+        // Smooth scroll for hero images
         document.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section');
-            sections.forEach(section => {
-                const title = section.querySelector('h2');
+            const heroes = document.querySelectorAll('.hero-image');
+            heroes.forEach(hero => {
+                const section = hero.closest('section');
                 const rect = section.getBoundingClientRect();
-                const scrollOffset = (rect.top / window.innerHeight) * 100;
-                title.style.setProperty('--scroll-offset', `${scrollOffset}px`);
+                const scrollProgress = rect.top / window.innerHeight;
+                const offset = Math.min(100, Math.max(-100, scrollProgress * 30));
+                hero.style.setProperty('--scroll-offset', `${offset}px`);
             });
         });
 
-        // Mobile Menu Toggle
-        const mobileMenu = document.getElementById('mobileMenu');
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('#mobileMenu')) return;
-            mobileMenu.classList.add('-translate-y-full');
+        // Carousel Navigation
+        document.querySelectorAll('.movie-carousel-container').forEach(container => {
+            const carousel = container.querySelector('.movie-carousel');
+            const prevBtn = container.querySelector('button:first-of-type');
+            const nextBtn = container.querySelector('button:last-of-type');
+            
+            prevBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: -300, behavior: 'smooth' });
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: 300, behavior: 'smooth' });
+            });
         });
     </script>
 </body>

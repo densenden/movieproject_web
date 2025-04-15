@@ -1,23 +1,23 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./templates/**/*.html",
-    "./static/**/*.js",
-  ],
+  content: ["./templates/**/*.{html,js}"],
   theme: {
     extend: {
       colors: {
-        background: '#141414',
-        surface: '#222',
-        'surface-dark': '#000',
-        'text-primary': '#ffffff',
-        'text-secondary': '#aaaaaa',
-        accent: '#e50914',
+        background: '#121212',
+        'surface-dark': '#1E1E1E',
+        'surface-light': '#2E2E2E',
+        'text-primary': '#FFFFFF',
+        'text-secondary': '#B3B3B3',
+        accent: '#E50914',
       },
-      fontFamily: {
-        sans: ['-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-        heading: ['Bebas', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+      height: {
+        '35vh': '35vh',
       },
-    }
+      minHeight: {
+        'carousel': '200px',
+      }
+    },
   },
   plugins: [],
 } 

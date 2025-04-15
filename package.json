@@ -1,14 +1,12 @@
 {
   "name": "senflix",
   "version": "1.0.0",
-  "description": "SenFlix - Movie Streaming Platform",
+  "description": "SenFlix Movie Platform",
   "scripts": {
-    "build:css": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css",
-    "watch:css": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch"
+    "build:css": "tailwindcss -i ./static/css/styles.css -o ./static/css/output.css --minify",
+    "watch:css": "tailwindcss -i ./static/css/styles.css -o ./static/css/output.css --watch"
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.1",
-    "postcss": "^8.4.35",
-    "autoprefixer": "^10.4.17"
+    "tailwindcss": "^3.3.0"
   }
 } 

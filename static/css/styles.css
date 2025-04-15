@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+.hero-image {
+    transform: translateY(var(--scroll-offset, 0));
+    transition: transform 0.1s ease-out;
+}
+
+.movie-carousel {
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.movie-carousel::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* Carousel navigation buttons */
+.carousel-button {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.movie-carousel-container:hover .carousel-button {
+    opacity: 1;
+}
+
+.parallax-hero {
+    transform: translateY(var(--parallax-offset, 0));
+    transition: transform 0.1s ease-out;
+}
+
+.parallax-title {
+    transform: translateY(var(--title-offset, 0));
+    transition: transform 0.1s ease-out;
+} 
