@@ -143,6 +143,37 @@ class MovieCategory(db.Model):
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), primary_key=True)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), primary_key=True)
 
+class MovieOMDB(db.Model):
+    """
+    Saves OMDB data for a movie from the OMDB API.
+    """
+    __tablename__ = 'movies_omdb'
+    id = db.Column(db.Integer, db.ForeignKey('movies.id'), primary_key=True)
+    imdb_id = db.Column(db.String(20))
+    title = db.Column(db.String(255))
+    year = db.Column(db.String(10))
+    rated = db.Column(db.String(10))
+    released = db.Column(db.String(20))
+    runtime = db.Column(db.String(20))
+    genre = db.Column(db.String(100))
+    director = db.Column(db.String(100))
+    writer = db.Column(db.String(255))
+    actors = db.Column(db.String(255))
+    plot = db.Column(db.Text)
+    language = db.Column(db.String(50))
+    country = db.Column(db.String(50))
+    awards = db.Column(db.String(255))
+    poster_img = db.Column(db.String(255))
+    imdb_rating = db.Column(db.String(10))
+    rotten_tomatoes = db.Column(db.String(20))
+    metacritic = db.Column(db.String(10))
+    type = db.Column(db.String(20))
+    dvd = db.Column(db.String(20))
+    box_office = db.Column(db.String(50))
+    production = db.Column(db.String(100))
+    website = db.Column(db.String(255))
+    movie = db.relationship('Movie', back_populates='omdb_data')
+
 class SQLiteDataManager(DataManagerInterface):
     def __init__(self, app=None):
         if app:
