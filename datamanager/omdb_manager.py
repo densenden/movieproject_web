@@ -30,17 +30,15 @@ class MovieOMDB(db.Model):
         language (str): Languages
         country (str): Countries of production
         awards (str): Awards won/nominated
-        poster_path (str): Local path to poster image
-        ratings (JSON): Array of ratings from different sources
-        metascore (str): Metacritic score
+        poster_img (str): Filename of poster image
         imdb_rating (str): IMDB rating
-        imdb_votes (str): Number of IMDB votes
+        rotten_tomatoes (str): Rotten Tomatoes rating
+        metacritic (str): Metacritic rating
         type (str): Type (movie, series, etc.)
         dvd (str): DVD release date
         box_office (str): Box office earnings
         production (str): Production company
         website (str): Official website
-        raw_data (JSON): Complete raw data from API
     """
     __tablename__ = 'movies_omdb'
     
@@ -59,17 +57,15 @@ class MovieOMDB(db.Model):
     language = db.Column(db.String(255))
     country = db.Column(db.String(255))
     awards = db.Column(db.Text)
-    poster_path = db.Column(db.String(255))
-    ratings = db.Column(db.JSON)
-    metascore = db.Column(db.String(10))
+    poster_img = db.Column(db.String(255))
     imdb_rating = db.Column(db.String(10))
-    imdb_votes = db.Column(db.String(20))
+    rotten_tomatoes = db.Column(db.String(10))
+    metacritic = db.Column(db.String(10))
     type = db.Column(db.String(20))
     dvd = db.Column(db.String(50))
     box_office = db.Column(db.String(50))
     production = db.Column(db.String(255))
     website = db.Column(db.String(255))
-    raw_data = db.Column(db.JSON)
     
     # Relationship to Movie model
     movie = db.relationship("Movie", back_populates="omdb_data")
@@ -95,10 +91,27 @@ class OMDBManager:
     def _save_to_db(self, movie_id: int, data: Dict) -> None:
         """Saves movie data to database"""
         # Download poster if available and get local path
-        poster_path = None
+        poster_img = None
         poster_url = data.get('Poster')
         if poster_url and poster_url != "N/A":
             poster_path = self._download_poster(data['imdbID'], poster_url)
+            if poster_path:
+                poster_img = poster_path.name
+            
+        # Extract ratings
+        imdb_rating = None
+        rotten_tomatoes = None
+        metacritic = None
+        
+        for rating in data.get('Ratings', []):
+            source = rating.get('Source', '').lower()
+            value = rating.get('Value')
+            if 'internet movie database' in source:
+                imdb_rating = value
+            elif 'rotten tomatoes' in source:
+                rotten_tomatoes = value
+            elif 'metacritic' in source:
+                metacritic = value
             
         movie_omdb = MovieOMDB(
             id=movie_id,
@@ -116,17 +129,15 @@ class OMDBManager:
             language=data.get('Language'),
             country=data.get('Country'),
             awards=data.get('Awards'),
-            poster_path=str(poster_path) if poster_path else None,
-            ratings=data.get('Ratings', []),
-            metascore=data.get('Metascore'),
-            imdb_rating=data.get('imdbRating'),
-            imdb_votes=data.get('imdbVotes'),
+            poster_img=poster_img,
+            imdb_rating=imdb_rating,
+            rotten_tomatoes=rotten_tomatoes,
+            metacritic=metacritic,
             type=data.get('Type'),
             dvd=data.get('DVD'),
             box_office=data.get('BoxOffice'),
             production=data.get('Production'),
-            website=data.get('Website'),
-            raw_data=data
+            website=data.get('Website')
         )
         db.session.add(movie_omdb)
         db.session.commit()
@@ -172,7 +183,16 @@ class OMDBManager:
         if self._is_in_db(movie_id):
             movie_omdb = MovieOMDB.query.filter_by(id=movie_id).first()
             if movie_omdb:
-                return movie_omdb.raw_data
+                return {
+                    'Response': 'True',
+                    'Title': movie_omdb.title,
+                    'Year': movie_omdb.year,
+                    'imdbID': movie_omdb.imdb_id,
+                    'imdbRating': movie_omdb.imdb_rating,
+                    'Rotten Tomatoes': movie_omdb.rotten_tomatoes,
+                    'Metacritic': movie_omdb.metacritic,
+                    'Genre': movie_omdb.genre
+                }
         
         # If not in database, fetch from API
         api_data = self._get_from_api(title, year)

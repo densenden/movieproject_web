@@ -29,7 +29,9 @@ def main():
                 if result.get('Response') == 'True':
                     print(f"✓ Erfolgreich gespeichert")
                     print(f"  - IMDB ID: {result.get('imdbID')}")
-                    print(f"  - Rating: {result.get('imdbRating')}")
+                    print(f"  - IMDB Rating: {result.get('imdbRating')}")
+                    print(f"  - Rotten Tomatoes: {result.get('Rotten Tomatoes')}")
+                    print(f"  - Metacritic: {result.get('Metacritic')}")
                     print(f"  - Genre: {result.get('Genre')}")
                 else:
                     print(f"✗ Fehler: {result.get('Error')}")
