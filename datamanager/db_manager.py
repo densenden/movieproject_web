@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from interface import DataManagerInterface
+from .interface import DataManagerInterface
 
 db = SQLAlchemy()
 

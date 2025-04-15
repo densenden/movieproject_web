@@ -1,6 +1,9 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from datamanager import (
+    db, SQLiteDataManager, User, Movie, UserFavorite,
+    StreamingPlatform, MoviePlatform, Category, MovieCategory
+)
 import os
-from db_manager import SQLiteDataManager, db
 
 def print_user_favorites(dm, user_id):
     user = dm.get_user_by_id(user_id)

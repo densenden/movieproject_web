@@ -1,7 +1,8 @@
 from flask import Flask
 import os
-from db_manager import (
-    db, SQLiteDataManager, User, Movie, UserFavorite,
+from . import db
+from datamanager import (
+    SQLiteDataManager, User, Movie, UserFavorite,
     StreamingPlatform, MoviePlatform, Category, MovieCategory
 )
 
