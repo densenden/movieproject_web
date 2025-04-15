@@ -328,14 +328,58 @@ class SQLiteDataManager(DataManagerInterface):
 
     def get_movies_by_category(self, category_id):
         """
-        Return all movies in a specific category.
+        Get all movies for a specific category.
         
         Args:
             category_id (int): ID of the category
             
         Returns:
-            list: List of Movie objects in the specified category
+            list: List of Movie objects in the category
         """
-        return Movie.query.join(MovieCategory).filter(
-            MovieCategory.category_id == category_id
-        ).all()
+        category = Category.query.get(category_id)
+        return category.movies.all() if category else []
+
+    def get_all_categories_with_movies(self):
+        """
+        Return all categories with their associated movies.
+        
+        Returns:
+            list: List of dictionaries containing category data and movies
+            [
+                {
+                    'id': category.id,
+                    'name': category.name,
+                    'img': category.img_url,
+                    'movies': [
+                        {
+                            'id': movie.id,
+                            'title': movie.name,
+                            'platforms': [platform.name for platform in movie.platforms]
+                        }
+                        for movie in category.movies
+                    ]
+                }
+                for category in Category.query.all()
+            ]
+        """
+        categories = []
+        for category in Category.query.all():
+            category_data = {
+                'id': category.id,
+                'name': category.name,
+                'img': category.img_url,
+                'movies': []
+            }
+            
+            # Get all movies for this category
+            for movie in category.movies:
+                movie_data = {
+                    'id': movie.id,
+                    'title': movie.name,
+                    'platforms': [platform.name for platform in movie.platforms]
+                }
+                category_data['movies'].append(movie_data)
+            
+            categories.append(category_data)
+        
+        return categories

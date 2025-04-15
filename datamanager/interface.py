@@ -73,3 +73,29 @@ class DataManagerInterface(ABC):
     def get_movies_by_category(self, category_id):
         """Return all movies in a specific category"""
         pass
+
+    @abstractmethod
+    def get_all_categories_with_movies(self):
+        """
+        Get all categories with their associated movies.
+        
+        Returns:
+            list: List of dictionaries containing category data and movies
+            [
+                {
+                    'id': category.id,
+                    'name': category.name,
+                    'hero_image': category.img_url,
+                    'movies': [
+                        {
+                            'id': movie.id,
+                            'title': movie.name,
+                            'description': f"Movie in category {category.name}"
+                        }
+                        for movie in category.movies
+                    ]
+                }
+                for category in categories
+            ]
+        """
+        pass

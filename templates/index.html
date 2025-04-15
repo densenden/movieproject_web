@@ -31,7 +31,7 @@
             <!-- Hero Section -->
             <div class="relative h-35vh overflow-hidden">
                 <div class="absolute inset-0 will-change-transform">
-                    <img src="{{ category.hero_image }}" 
+                    <img src="{{ category.img }}" 
                          alt="{{ category.name }}" 
                          class="w-full h-full object-cover hero-image transform">
                     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-background"></div>
@@ -46,9 +46,9 @@
                 <div class="movie-carousel flex space-x-4 overflow-x-auto min-h-carousel">
                     {% for movie in category.movies %}
                     <div class="flex-none w-64">
-                        <div class="bg-surface-dark rounded-lg p-4 h-full hover:bg-surface-light transition-colors duration-300">
-                            <h3 class="text-lg font-bold mb-2">{{ movie.title }}</h3>
-                            <p class="text-sm text-text-secondary">{{ movie.description }}</p>
+                        <div class="movie-card">
+                            <h3>{{ movie.title }}</h3>
+                            <p>{{ movie.description }}</p>
                         </div>
                     </div>
                     {% endfor %}

@@ -36,4 +36,43 @@
 .parallax-title {
     transform: translateY(var(--title-offset, 0));
     transition: transform 0.1s ease-out;
+}
+
+@layer components {
+    .movie-carousel {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .movie-carousel::-webkit-scrollbar {
+        display: none;
+    }
+
+    .min-h-carousel {
+        min-height: 300px;
+    }
+
+    .h-35vh {
+        height: 35vh;
+    }
+
+    /* Movie Card Styles */
+    .movie-card {
+        @apply bg-surface-dark rounded-lg p-4 h-full hover:bg-surface-light transition-colors duration-300;
+        min-height: 200px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .movie-card h3 {
+        @apply text-lg font-bold mb-2 text-text-primary;
+    }
+
+    .movie-card p {
+        @apply text-sm text-text-secondary;
+    }
+
+    .movie-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
 } 
