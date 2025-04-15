@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,27 +8,32 @@
 </head>
 <body class="bg-background text-text-primary">
     <!-- Sidebar -->
-    <aside class="fixed left-0 top-0 w-60 h-full bg-surface-dark p-4">
+    <aside class="fixed left-0 top-0 w-60 h-full bg-surface-dark p-4 z-50">
         <h1 class="text-2xl font-bold text-accent mb-8">SenFlix</h1>
         <nav>
-            <ul>
-                <li class="py-2 hover:text-accent cursor-pointer transition-colors">Home</li>
-                <li class="py-2 hover:text-accent cursor-pointer transition-colors">Movies</li>
-                <li class="py-2 hover:text-accent cursor-pointer transition-colors">TV Shows</li>
+            <ul id="category-nav">
+                {% for category in categories %}
+                <li>
+                    <a href="#category-{{ category.id }}" 
+                       class="block py-2 hover:text-accent cursor-pointer transition-colors">
+                        {{ category.name }}
+                    </a>
+                </li>
+                {% endfor %}
             </ul>
         </nav>
     </aside>
 
     <!-- Main Content -->
-    <main class="ml-60">
+    <main class="ml-60 snap-y snap-mandatory h-screen overflow-y-auto" id="main-content">
         {% for category in categories %}
-        <section class="mb-12">
+        <section id="category-{{ category.id }}" class="mb-12 snap-start h-screen">
             <!-- Hero Section -->
             <div class="relative h-35vh overflow-hidden">
-                <div class="absolute inset-0">
+                <div class="absolute inset-0 will-change-transform">
                     <img src="{{ category.hero_image }}" 
                          alt="{{ category.name }}" 
-                         class="w-full h-full object-cover hero-image">
+                         class="w-full h-full object-cover hero-image transform">
                     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-background"></div>
                 </div>
                 <div class="relative h-full flex items-end">
@@ -66,17 +71,36 @@
     </main>
 
     <script>
-        // Smooth scroll for hero images
-        document.addEventListener('scroll', () => {
-            const heroes = document.querySelectorAll('.hero-image');
+        // Smooth scroll for hero images with parallax effect
+        const mainContent = document.getElementById('main-content');
+        const heroes = document.querySelectorAll('.hero-image');
+        
+        mainContent.addEventListener('scroll', () => {
             heroes.forEach(hero => {
                 const section = hero.closest('section');
                 const rect = section.getBoundingClientRect();
                 const scrollProgress = rect.top / window.innerHeight;
-                const offset = Math.min(100, Math.max(-100, scrollProgress * 30));
-                hero.style.setProperty('--scroll-offset', `${offset}px`);
+                const translateY = Math.min(100, Math.max(-100, scrollProgress * 50));
+                hero.style.transform = `translateY(${translateY}px)`;
             });
         });
+
+        // Highlight active category in navigation
+        function updateActiveCategory() {
+            const sections = document.querySelectorAll('section');
+            const navItems = document.querySelectorAll('#category-nav a');
+            
+            sections.forEach((section, index) => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    navItems.forEach(item => item.classList.remove('text-accent'));
+                    navItems[index].classList.add('text-accent');
+                }
+            });
+        }
+
+        mainContent.addEventListener('scroll', updateActiveCategory);
+        updateActiveCategory(); // Initial call
 
         // Carousel Navigation
         document.querySelectorAll('.movie-carousel-container').forEach(container => {
@@ -95,3 +119,5 @@
     </script>
 </body>
 </html>
+
+
