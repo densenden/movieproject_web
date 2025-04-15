@@ -13,7 +13,7 @@ MoviWeb is a dynamic web application that allows users to discover, track, and s
 - 🚧 Web Interface (In Progress)
 
 ## Database Schema
-![database_scheme](https://github.com/user-attachments/assets/2d2021d0-69cd-4a77-9e68-c268ddfa7593)
+![database_scheme](data/db_schema.png)
 
 ### Schema Explanation
 The database is designed with the following key components:
