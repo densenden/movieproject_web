@@ -4,13 +4,35 @@ from .interface import DataManagerInterface
 db = SQLAlchemy()
 
 class User(db.Model):
+    """
+    Represents a user in the system.
+    
+    Attributes:
+        id (int): Primary key
+        name (str): User's name
+        whatsapp_number (str): User's WhatsApp contact number
+        description (str): User's profile description
+        avatar_url (str): URL to user's profile picture
+        favorites (relationship): One-to-many relationship with UserFavorite
+    """
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     whatsapp_number = db.Column(db.String(20))
+    description = db.Column(db.Text)
+    avatar_url = db.Column(db.String(255))
     favorites = db.relationship('UserFavorite', backref='user', lazy=True)
 
 class Movie(db.Model):
+    """
+    Represents a movie in the system.
+    
+    Attributes:
+        id (int): Primary key
+        title (str): Movie title
+        platforms (relationship): Many-to-many relationship with StreamingPlatform
+        categories (relationship): Many-to-many relationship with Category
+    """
     __tablename__ = 'movies'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
@@ -20,6 +42,16 @@ class Movie(db.Model):
                                backref=db.backref('movies', lazy=True))
 
 class UserFavorite(db.Model):
+    """
+    Represents a user's favorite movie with additional metadata.
+    
+    Attributes:
+        user_id (int): Foreign key to User
+        movie_id (int): Foreign key to Movie
+        watched (bool): Whether the user has watched the movie
+        comment (str): User's comment about the movie
+        rating (float): User's rating of the movie
+    """
     __tablename__ = 'user_favorites'
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), primary_key=True)
@@ -29,21 +61,51 @@ class UserFavorite(db.Model):
     movie = db.relationship('Movie', backref='favorites')
 
 class StreamingPlatform(db.Model):
+    """
+    Represents a streaming platform where movies are available.
+    
+    Attributes:
+        id (int): Primary key
+        name (str): Name of the streaming platform
+    """
     __tablename__ = 'streaming_platforms'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
 
 class MoviePlatform(db.Model):
+    """
+    Junction table for many-to-many relationship between Movie and StreamingPlatform.
+    
+    Attributes:
+        movie_id (int): Foreign key to Movie
+        platform_id (int): Foreign key to StreamingPlatform
+    """
     __tablename__ = 'movie_platforms'
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), primary_key=True)
     platform_id = db.Column(db.Integer, db.ForeignKey('streaming_platforms.id'), primary_key=True)
 
 class Category(db.Model):
+    """
+    Represents a movie category/genre.
+    
+    Attributes:
+        id (int): Primary key
+        name (str): Name of the category
+        img (str): URL or filename of the category image
+    """
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
+    img = db.Column(db.String(255))
 
 class MovieCategory(db.Model):
+    """
+    Junction table for many-to-many relationship between Movie and Category.
+    
+    Attributes:
+        movie_id (int): Foreign key to Movie
+        category_id (int): Foreign key to Category
+    """
     __tablename__ = 'movie_categories'
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), primary_key=True)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), primary_key=True)
@@ -87,14 +149,121 @@ class SQLiteDataManager(DataManagerInterface):
         return [platform.name for platform in movie.platforms]
 
     def get_movie_categories(self, movie_id):
+        """
+        Return all category names and images for a given movie.
+        
+        Returns:
+            list: List of dictionaries containing category name and image URL
+            [
+                {
+                    'name': category.name,
+                    'img': category.img
+                }
+                for category in movie.categories
+            ]
+        """
         movie = Movie.query.get(movie_id)
-        return [category.name for category in movie.categories]
+        if not movie:
+            return []
+        return [
+            {
+                'name': category.name,
+                'img': category.img
+            }
+            for category in movie.categories
+        ]
 
-    def add_user(self, name, whatsapp_number):
-        user = User(name=name, whatsapp_number=whatsapp_number)
+    def add_user(self, name, whatsapp_number, description=None, avatar_url=None):
+        user = User(
+            name=name,
+            whatsapp_number=whatsapp_number,
+            description=description,
+            avatar_url=avatar_url
+        )
         db.session.add(user)
         db.session.commit()
         return user.id
 
-    def get_user_movies(self, user_id):
-        return Movie.query.join(UserFavorite).filter(UserFavorite.user_id == user_id).all()
+    def get_movie_data(self, movie_id):
+        """
+        Return complete movie data including categories and platforms.
+        
+        Returns:
+            dict: Movie data with the following structure:
+            {
+                'id': movie.id,
+                'title': movie.title,
+                'categories': [category.name for category in movie.categories],
+                'platforms': [platform.name for platform in movie.platforms]
+            }
+        """
+        movie = Movie.query.get(movie_id)
+        if not movie:
+            return None
+            
+        return {
+            'id': movie.id,
+            'title': movie.title,
+            'categories': [category.name for category in movie.categories],
+            'platforms': [platform.name for platform in movie.platforms]
+        }
+
+    def get_user_data(self, user_id):
+        """
+        Return complete user data including all favorites, comments and watch history.
+        
+        Returns:
+            dict: User data with the following structure:
+            {
+                'id': user.id,
+                'name': user.name,
+                'whatsapp_number': user.whatsapp_number,
+                'description': user.description,
+                'avatar_url': user.avatar_url,
+                'favorites': [
+                    {
+                        'movie_id': fav.movie_id,
+                        'title': fav.movie.title,
+                        'watched': fav.watched,
+                        'comment': fav.comment,
+                        'rating': fav.rating
+                    }
+                    for fav in user.favorites
+                ]
+            }
+        """
+        user = User.query.get(user_id)
+        if not user:
+            return None
+            
+        return {
+            'id': user.id,
+            'name': user.name,
+            'whatsapp_number': user.whatsapp_number,
+            'description': user.description,
+            'avatar_url': user.avatar_url,
+            'favorites': [
+                {
+                    'movie_id': fav.movie_id,
+                    'title': fav.movie.title,
+                    'watched': fav.watched,
+                    'comment': fav.comment,
+                    'rating': fav.rating
+                }
+                for fav in user.favorites
+            ]
+        }
+
+    def get_movies_by_category(self, category_id):
+        """
+        Return all movies in a specific category.
+        
+        Args:
+            category_id (int): ID of the category
+            
+        Returns:
+            list: List of Movie objects in the specified category
+        """
+        return Movie.query.join(MovieCategory).filter(
+            MovieCategory.category_id == category_id
+        ).all()

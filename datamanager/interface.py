@@ -34,15 +34,42 @@ class DataManagerInterface(ABC):
 
     @abstractmethod
     def get_movie_categories(self, movie_id):
-        """Return all category names for a given movie"""
+        """
+        Return all category names and images for a given movie.
+        
+        Returns:
+            list: List of dictionaries containing category name and image URL
+            [
+                {
+                    'name': category.name,
+                    'img': category.img
+                }
+                for category in movie.categories
+            ]
+        """
         pass
 
     @abstractmethod
-    def add_user(self, name, whatsapp_number):
-        """Create new user"""
+    def add_user(self, name, whatsapp_number, description=None, avatar_url=None):
+        """Create new user with optional description and avatar URL"""
         pass
 
     @abstractmethod
     def get_user_by_id(self, user_id):
         """Return user info for given ID"""
+        pass
+
+    @abstractmethod
+    def get_movie_data(self, movie_id):
+        """Return complete movie data including categories and platforms"""
+        pass
+
+    @abstractmethod
+    def get_user_data(self, user_id):
+        """Return complete user data including all favorites, comments and watch history"""
+        pass
+
+    @abstractmethod
+    def get_movies_by_category(self, category_id):
+        """Return all movies in a specific category"""
         pass
