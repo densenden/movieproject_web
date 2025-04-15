@@ -8,7 +8,7 @@
     <style>
         .movie-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 1.5rem;
             padding: 2rem;
             perspective: 1000px;
@@ -31,53 +31,75 @@
         }
 
         .movie-card {
+            position: relative;
+            aspect-ratio: 2/3;
+            border-radius: 0.75rem;
+            overflow: hidden;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(12px) saturate(180%);
             -webkit-backdrop-filter: blur(12px) saturate(180%);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            height: 100%;
-            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-            position: relative;
-            overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transform-style: preserve-3d;
             transform: translateZ(0);
         }
 
-        .movie-card::before {
-            content: '';
+        .movie-poster {
             position: absolute;
             inset: 0;
-            background: linear-gradient(125deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 65%);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        .movie-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%);
             opacity: 0;
-            transition: opacity 3s ease-out, transform 0.2s ease-out;
-            pointer-events: none;
-            transform-origin: 50% 50%;
+            transition: opacity 0.3s ease;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
         }
 
-        .movie-card:hover::before {
+        .movie-card:hover .movie-overlay {
             opacity: 1;
-            transition: opacity 0.2s ease-out, transform 0.2s ease-out;
         }
 
-        .movie-card:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-            background: rgba(255, 255, 255, 0.15);
+        .movie-card:hover .movie-poster {
+            opacity: 0.2;
         }
 
-        .movie-card-content {
-            transform-style: preserve-3d;
+        .movie-info {
+            color: white;
             transform: translateZ(20px);
         }
 
         .movie-title {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             color: rgba(255, 255, 255, 0.95);
+        }
+
+        .movie-meta {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-details {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-watchers {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: auto;
         }
 
         .category-hero {
@@ -113,11 +135,19 @@
             text-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
             color: rgba(255, 255, 255, 0.95);
         }
+
+        .sidebar {
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
     </style>
 </head>
 <body class="bg-background text-text-primary" style="--background-color: #121212;">
     <!-- Sidebar -->
-    <aside class="fixed left-0 top-0 w-60 h-full bg-surface-dark p-4 z-50">
+    <aside class="sidebar fixed left-0 top-0 w-60 h-full bg-surface-dark p-4 z-50">
         <h1 class="text-2xl font-bold text-accent mb-8">SenFlix</h1>
         <nav>
             <ul id="category-nav">
@@ -134,7 +164,7 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="ml-60 snap-y snap-mandatory h-screen overflow-y-auto" id="main-content">
+    <main class="main-content ml-60 snap-y snap-mandatory h-screen overflow-y-auto" id="main-content">
         {% for category in categories %}
         <section id="category-{{ category.id }}" class="snap-start h-screen relative">
             <!-- Hero Section -->
@@ -157,14 +187,41 @@
                             <div class="movie-grid">
                                 {% for movie in category.movies %}
                                 <div class="movie-card">
-                                    <div class="movie-card-content">
-                                        <h3 class="movie-title text-accent">{{ movie.title }}</h3>
-                                        <div class="text-sm text-gray-300 mb-4">
-                                            {% for platform in movie.platforms %}
-                                            <span class="inline-block px-2 py-1 bg-surface-dark rounded-full mr-2 mb-2">
-                                                {{ platform }}
-                                            </span>
-                                            {% endfor %}
+                                    <img src="{{ movie.poster_url }}" alt="{{ movie.title }}" class="movie-poster">
+                                    <div class="movie-overlay">
+                                        <div class="movie-info">
+                                            <h3 class="movie-title">{{ movie.title }}</h3>
+                                            {% if movie.omdb_data %}
+                                            <div class="movie-meta">
+                                                <div>{{ movie.omdb_data.year }} • {{ movie.omdb_data.runtime }}</div>
+                                            </div>
+                                            <div class="movie-details">
+                                                <div class="mb-2">
+                                                    <span class="font-medium">Director:</span>
+                                                    <span>{{ movie.omdb_data.director }}</span>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <span class="font-medium">Starring:</span>
+                                                    <span>{{ movie.omdb_data.actors }}</span>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <span class="font-medium">Genres:</span>
+                                                    <span>{{ movie.omdb_data.genre }}</span>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            <div class="movie-watchers">
+                                                {% if movie.favorites %}
+                                                <div class="font-medium">Watched by:</div>
+                                                <div class="flex flex-wrap gap-1 mt-1">
+                                                    {% for fav in movie.favorites if fav.watched %}
+                                                    <span class="px-2 py-1 bg-surface-dark rounded-full text-xs">
+                                                        {{ fav.user.name }}
+                                                    </span>
+                                                    {% endfor %}
+                                                </div>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -191,8 +248,39 @@
     </main>
 
     <script>
-        // Smooth scroll for hero images with parallax effect
+        // Auto-hide sidebar
+        let mouseMoveTimeout;
+        const sidebar = document.querySelector('.sidebar');
         const mainContent = document.getElementById('main-content');
+        
+        function hideSidebar() {
+            sidebar.classList.add('hidden');
+            mainContent.classList.remove('ml-60');
+            mainContent.classList.add('w-full');
+        }
+        
+        function showSidebar() {
+            sidebar.classList.remove('hidden');
+            mainContent.classList.add('ml-60');
+            mainContent.classList.remove('w-full');
+        }
+        
+        document.addEventListener('mousemove', (e) => {
+            if (e.clientX < 60) {
+                showSidebar();
+                clearTimeout(mouseMoveTimeout);
+            } else {
+                clearTimeout(mouseMoveTimeout);
+                mouseMoveTimeout = setTimeout(hideSidebar, 5000);
+            }
+        });
+        document.addEventListener('scroll', () => {
+            showSidebar();
+            clearTimeout(mouseMoveTimeout);
+            mouseMoveTimeout = setTimeout(hideSidebar, 5000);
+        }, true);
+
+        // Smooth scroll for hero images
         const heroes = document.querySelectorAll('.hero-image');
         
         mainContent.addEventListener('scroll', () => {
@@ -205,7 +293,7 @@
             });
         });
 
-        // Highlight active category in navigation
+        // Highlight active category
         function updateActiveCategory() {
             const sections = document.querySelectorAll('section');
             const navItems = document.querySelectorAll('#category-nav a');
@@ -220,7 +308,7 @@
         }
 
         mainContent.addEventListener('scroll', updateActiveCategory);
-        updateActiveCategory(); // Initial call
+        updateActiveCategory();
 
         // Grid Navigation
         document.querySelectorAll('.movie-grid-container').forEach(container => {
