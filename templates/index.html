@@ -3,95 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Showcase</title>
-    <link rel="stylesheet" href="../static/styles.css">
+    <title>SenFlix</title>
+    <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body>
-    <nav class="sidebar">
-        <h1>Senflix</h1>
-        <ul>
-            <li>Home</li>
-            <li>Trending</li>
-            <li>Top 10</li>
-            <li>New Releases</li>
-            <li>Genres</li>
-        </ul>
-    </nav>
-    <div class="main-content">
-        <header class="main-header">
-            <h1>Home of Senflix</h1>
-            <p>Discover the good stuff</p>
-        </header>
-        <h2 class="section-title">All Movies</h2>
-        <div class="movie-row">
-<div class="movie-card">
-    <div class="card-image" style="background-image: url('https://via.placeholder.com/200x300')"></div>
-    <div class="card-overlay"></div>
-    <div class="card-content">
-        <h3>Movie Title</h3>
-        <p>Short Description</p>
-        <p>Genre | Year</p>
-    </div>
-</div>
-            <!-- Weitere Movie Cards -->
+<body class="bg-background text-text-primary">
+    <!-- Mobile Menu -->
+    <div class="lg:hidden fixed top-0 left-0 w-full bg-surface-dark z-50 transform -translate-y-full transition-transform duration-300" id="mobileMenu">
+        <div class="p-4">
+            <h1 class="text-2xl font-heading text-accent">SenFlix</h1>
+            <nav class="mt-4">
+                <ul>
+                    <li class="py-2">Home</li>
+                    <li class="py-2">Movies</li>
+                    <li class="py-2">TV Shows</li>
+                </ul>
+            </nav>
         </div>
+    </div>
 
-        <h2 class="section-title">Top 10 Movies in Your Area Today</h2>
-        <div class="movie-row">
-<div class="movie-card">
-    <div class="card-image" style="background-image: url('https://via.placeholder.com/200x300')"></div>
-    <div class="card-overlay"></div>
-    <div class="card-content">
-        <h3>Movie Title</h3>
-        <p>Short Description</p>
-        <p>Genre | Year</p>
-    </div>
-</div>
+    <!-- Desktop Sidebar -->
+    <div class="hidden lg:block fixed left-0 top-0 w-60 h-full bg-surface-dark">
+        <div class="p-4">
+            <h1 class="text-2xl font-heading text-accent">SenFlix</h1>
+            <nav class="mt-4">
+                <ul>
+                    <li class="py-2">Home</li>
+                    <li class="py-2">Movies</li>
+                    <li class="py-2">TV Shows</li>
+                </ul>
+            </nav>
         </div>
+    </div>
 
-        <h2 class="section-title">What You Might Like</h2>
-        <div class="movie-row">
-<div class="movie-card">
-    <div class="card-image" style="background-image: url('https://via.placeholder.com/200x300')"></div>
-    <div class="card-overlay"></div>
-    <div class="card-content">
-        <h3>Movie Title</h3>
-        <p>Short Description</p>
-        <p>Genre | Year</p>
-    </div>
-</div>
-        </div>
+    <!-- Main Content -->
+    <main class="lg:ml-60">
+        {% for category in categories %}
+        <section class="relative">
+            <!-- Hero Section -->
+            <div class="relative h-[75vh] w-full overflow-hidden">
+                <img src="{{ category.hero_image }}" alt="{{ category.name }}" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background"></div>
+                <h2 class="absolute bottom-20 left-10 text-6xl font-heading transform transition-transform duration-300" 
+                    style="transform: translateY(var(--scroll-offset, 0))">
+                    {{ category.name }}
+                </h2>
+            </div>
 
-        <h2 class="section-title">Latest Movies</h2>
-        <div class="movie-row">
-<div class="movie-card">
-    <div class="card-image" style="background-image: url('https://via.placeholder.com/200x300')"></div>
-    <div class="card-overlay"></div>
-    <div class="card-content">
-        <h3>Movie Title</h3>
-        <p>Short Description</p>
-        <p>Genre | Year</p>
-    </div>
-</div>
-<div class="movie-card">
-    <div class="card-image" style="background-image: url('https://via.placeholder.com/200x300')"></div>
-    <div class="card-overlay"></div>
-    <div class="card-content">
-        <h3>Movie Title</h3>
-        <p>Short Description</p>
-        <p>Genre | Year</p>
-    </div>
-</div>
-<div class="movie-card">
-    <div class="card-image" style="background-image: url('https://via.placeholder.com/200x300')"></div>
-    <div class="card-overlay"></div>
-    <div class="card-content">
-        <h3>Movie Title</h3>
-        <p>Short Description</p>
-        <p>Genre | Year</p>
-    </div>
-</div>
-        </div>
-    </div>
+            <!-- Movie Grid -->
+            <div class="p-4">
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                    {% for movie in category.movies %}
+                    <div class="group relative bg-surface-dark p-4 rounded-lg hover:bg-surface-light transition-colors duration-300">
+                        <div class="p-4">
+                            <h3 class="text-lg font-bold mb-2">{{ movie.title }}</h3>
+                            <p class="text-sm text-text-secondary">{{ movie.description }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endfor %}
+    </main>
+
+    <script>
+        // Parallax Effect
+        document.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                const title = section.querySelector('h2');
+                const rect = section.getBoundingClientRect();
+                const scrollOffset = (rect.top / window.innerHeight) * 100;
+                title.style.setProperty('--scroll-offset', `${scrollOffset}px`);
+            });
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobileMenu');
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#mobileMenu')) return;
+            mobileMenu.classList.add('-translate-y-full');
+        });
+    </script>
 </body>
 </html>

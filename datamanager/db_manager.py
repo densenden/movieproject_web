@@ -54,13 +54,13 @@ class Movie(db.Model):
     
     Attributes:
         id (int): Primary key
-        title (str): Movie title
+        name (str): Movie name
         platforms (relationship): Many-to-many relationship with StreamingPlatform
         categories (relationship): Many-to-many relationship with Category
     """
     __tablename__ = 'movies'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100))
+    name = db.Column(db.String(100))
     platforms = db.relationship('StreamingPlatform', secondary='movie_platforms', lazy='dynamic',
                               backref=db.backref('movies', lazy=True))
     categories = db.relationship('Category', secondary='movie_categories', lazy='dynamic',
@@ -246,7 +246,7 @@ class SQLiteDataManager(DataManagerInterface):
                 'favorites': [
                     {
                         'movie_id': fav.movie_id,
-                        'title': fav.movie.title,
+                        'title': fav.movie.name,
                         'watched': fav.watched,
                         'comment': fav.comment,
                         'rating': fav.rating,
@@ -272,7 +272,7 @@ class SQLiteDataManager(DataManagerInterface):
             'favorites': [
                 {
                     'movie_id': fav.movie_id,
-                    'title': fav.movie.title,
+                    'title': fav.movie.name,
                     'watched': fav.watched,
                     'comment': fav.comment,
                     'rating': fav.rating,
@@ -290,7 +290,7 @@ class SQLiteDataManager(DataManagerInterface):
             dict: Movie data with the following structure:
             {
                 'id': movie.id,
-                'title': movie.title,
+                'title': movie.name,
                 'categories': [category.name for category in movie.categories],
                 'platforms': [platform.name for platform in movie.platforms],
                 'user_data': [
@@ -311,7 +311,7 @@ class SQLiteDataManager(DataManagerInterface):
             
         return {
             'id': movie.id,
-            'title': movie.title,
+            'title': movie.name,
             'categories': [category.name for category in movie.categories],
             'platforms': [platform.name for platform in movie.platforms],
             'user_data': [
