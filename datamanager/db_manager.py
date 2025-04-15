@@ -10,14 +10,22 @@ class Avatar(db.Model):
     Attributes:
         id (int): Primary key
         name (str): Avatar name/identifier
-        profile_image (str): URL to profile image
-        hero_image (str): URL to hero/banner image
+        image (str): Image filename stored in static/avatars/
     """
     __tablename__ = 'avatars'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
-    profile_image = db.Column(db.Text)
-    hero_image = db.Column(db.Text)
+    image = db.Column(db.Text)
+
+    @property
+    def profile_image_url(self):
+        """Returns the full path for the profile image"""
+        return f"static/avatars/profile/{self.image}" if self.image else None
+
+    @property
+    def hero_image_url(self):
+        """Returns the full path for the hero image"""
+        return f"static/avatars/hero/{self.image}" if self.image else None
 
 class User(db.Model):
     """
@@ -110,12 +118,17 @@ class Category(db.Model):
     Attributes:
         id (int): Primary key
         name (str): Name of the category
-        img (str): URL or filename of the category image
+        img (str): Image filename in static/categories/
     """
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     img = db.Column(db.String(255))
+
+    @property
+    def img_url(self):
+        """Returns the full path for the category image"""
+        return f"static/categories/{self.img}" if self.img else None
 
 class MovieCategory(db.Model):
     """
@@ -176,7 +189,7 @@ class SQLiteDataManager(DataManagerInterface):
             [
                 {
                     'name': category.name,
-                    'img': category.img
+                    'img': category.img_url
                 }
                 for category in movie.categories
             ]
@@ -187,7 +200,7 @@ class SQLiteDataManager(DataManagerInterface):
         return [
             {
                 'name': category.name,
-                'img': category.img
+                'img': category.img_url
             }
             for category in movie.categories
         ]
@@ -227,8 +240,8 @@ class SQLiteDataManager(DataManagerInterface):
                 'whatsapp_number': user.whatsapp_number,
                 'description': user.description,
                 'avatar': {
-                    'profile_image': user.avatar.profile_image if user.avatar else None,
-                    'hero_image': user.avatar.hero_image if user.avatar else None
+                    'profile_image': user.avatar.profile_image_url if user.avatar else None,
+                    'hero_image': user.avatar.hero_image_url if user.avatar else None
                 },
                 'favorites': [
                     {
@@ -253,8 +266,8 @@ class SQLiteDataManager(DataManagerInterface):
             'whatsapp_number': user.whatsapp_number,
             'description': user.description,
             'avatar': {
-                'profile_image': user.avatar.profile_image if user.avatar else None,
-                'hero_image': user.avatar.hero_image if user.avatar else None
+                'profile_image': user.avatar.profile_image_url if user.avatar else None,
+                'hero_image': user.avatar.hero_image_url if user.avatar else None
             },
             'favorites': [
                 {
