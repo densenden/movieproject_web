@@ -1,0 +1,442 @@
+[
+    {
+        "title": "The Shawshank Redemption",
+        "year": "1994",
+        "data": {
+            "Title": "The Shawshank Redemption",
+            "Year": "1994",
+            "Rated": "R",
+            "Released": "14 Oct 1994",
+            "Runtime": "142 min",
+            "Genre": "Drama",
+            "Director": "Frank Darabont",
+            "Writer": "Stephen King, Frank Darabont",
+            "Actors": "Tim Robbins, Morgan Freeman, Bob Gunton",
+            "Plot": "Chronicles the experiences of a formerly successful banker as a prisoner in the gloomy jailhouse of Shawshank after being found guilty of a crime he did not commit. The film portrays the man's unique way of dealing with his new, torturous life; along the way he befriends a number of fellow prisoners, most notably a wise long-term inmate named Red.",
+            "Language": "English",
+            "Country": "United States",
+            "Awards": "Nominated for 7 Oscars. 21 wins & 42 nominations total",
+            "Poster": "https://m.media-amazon.com/images/M/MV5BMDAyY2FhYjctNDc5OS00MDNlLThiMGUtY2UxYWVkNGY2ZjljXkEyXkFqcGc@._V1_SX300.jpg",
+            "Ratings": [
+                {
+                    "Source": "Internet Movie Database",
+                    "Value": "9.3/10"
+                },
+                {
+                    "Source": "Rotten Tomatoes",
+                    "Value": "89%"
+                },
+                {
+                    "Source": "Metacritic",
+                    "Value": "82/100"
+                }
+            ],
+            "Metascore": "82",
+            "imdbRating": "9.3",
+            "imdbVotes": "3,031,101",
+            "imdbID": "tt0111161",
+            "Type": "movie",
+            "DVD": "N/A",
+            "BoxOffice": "$28,767,189",
+            "Production": "N/A",
+            "Website": "N/A",
+            "Response": "True"
+        }
+    },
+    {
+        "title": "Inception",
+        "year": "2010",
+        "data": {
+            "Title": "Inception",
+            "Year": "2010",
+            "Rated": "PG-13",
+            "Released": "16 Jul 2010",
+            "Runtime": "148 min",
+            "Genre": "Action, Adventure, Sci-Fi",
+            "Director": "Christopher Nolan",
+            "Writer": "Christopher Nolan",
+            "Actors": "Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page",
+            "Plot": "Dom Cobb is a skilled thief, the absolute best in the dangerous art of extraction, stealing valuable secrets from deep within the subconscious during the dream state, when the mind is at its most vulnerable. Cobb's rare ability has made him a coveted player in this treacherous new world of corporate espionage, but it has also made him an international fugitive and cost him everything he has ever loved. Now Cobb is being offered a chance at redemption. One last job could give him his life back but only if he can accomplish the impossible, inception. Instead of the perfect heist, Cobb and his team of specialists have to pull off the reverse: their task is not to steal an idea, but to plant one. If they succeed, it could be the perfect crime. But no amount of careful planning or expertise can prepare the team for the dangerous enemy that seems to predict their every move. An enemy that only Cobb could have seen coming.",
+            "Language": "English, Japanese, French",
+            "Country": "United States, United Kingdom",
+            "Awards": "Won 4 Oscars. 159 wins & 220 nominations total",
+            "Poster": "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
+            "Ratings": [
+                {
+                    "Source": "Internet Movie Database",
+                    "Value": "8.8/10"
+                },
+                {
+                    "Source": "Rotten Tomatoes",
+                    "Value": "87%"
+                },
+                {
+                    "Source": "Metacritic",
+                    "Value": "74/100"
+                }
+            ],
+            "Metascore": "74",
+            "imdbRating": "8.8",
+            "imdbVotes": "2,671,882",
+            "imdbID": "tt1375666",
+            "Type": "movie",
+            "DVD": "N/A",
+            "BoxOffice": "$292,587,330",
+            "Production": "N/A",
+            "Website": "N/A",
+            "Response": "True"
+        }
+    },
+    {
+        "title": "Pulp Fiction",
+        "year": "1994",
+        "data": {
+            "Title": "Pulp Fiction",
+            "Year": "1994",
+            "Rated": "R",
+            "Released": "14 Oct 1994",
+            "Runtime": "154 min",
+            "Genre": "Crime, Drama",
+            "Director": "Quentin Tarantino",
+            "Writer": "Quentin Tarantino, Roger Avary",
+            "Actors": "John Travolta, Uma Thurman, Samuel L. Jackson",
+            "Plot": "Jules Winnfield (Samuel L. Jackson) and Vincent Vega (John Travolta) are two hit men who are out to retrieve a suitcase stolen from their employer, mob boss Marsellus Wallace (Ving Rhames). Wallace has also asked Vincent to take his wife Mia (Uma Thurman) out a few days later when Wallace himself will be out of town. Butch Coolidge (Bruce Willis) is an aging boxer who is paid by Wallace to lose his fight. The lives of these seemingly unrelated people are woven together comprising of a series of funny, bizarre and uncalled-for incidents.",
+            "Language": "English, Spanish, French",
+            "Country": "United States",
+            "Awards": "Won 1 Oscar. 69 wins & 72 nominations total",
+            "Poster": "https://m.media-amazon.com/images/M/MV5BYTViYTE3ZGQtNDBlMC00ZTAyLTkyODMtZGRiZDg0MjA2YThkXkEyXkFqcGc@._V1_SX300.jpg",
+            "Ratings": [
+                {
+                    "Source": "Internet Movie Database",
+                    "Value": "8.9/10"
+                },
+                {
+                    "Source": "Rotten Tomatoes",
+                    "Value": "92%"
+                },
+                {
+                    "Source": "Metacritic",
+                    "Value": "95/100"
+                }
+            ],
+            "Metascore": "95",
+            "imdbRating": "8.9",
+            "imdbVotes": "2,318,236",
+            "imdbID": "tt0110912",
+            "Type": "movie",
+            "DVD": "N/A",
+            "BoxOffice": "$107,928,762",
+            "Production": "N/A",
+            "Website": "N/A",
+            "Response": "True"
+        }
+    },
+    {
+        "title": "The Dark Knight",
+        "year": "2008",
+        "data": {
+            "Title": "The Dark Knight",
+            "Year": "2008",
+            "Rated": "PG-13",
+            "Released": "18 Jul 2008",
+            "Runtime": "152 min",
+            "Genre": "Action, Crime, Drama",
+            "Director": "Christopher Nolan",
+            "Writer": "Jonathan Nolan, Christopher Nolan, David S. Goyer",
+            "Actors": "Christian Bale, Heath Ledger, Aaron Eckhart",
+            "Plot": "Set within a year after the events of Batman Begins (2005), Batman, Lieutenant James Gordon, and new District Attorney Harvey Dent successfully begin to round up the criminals that plague Gotham City, until a mysterious and sadistic criminal mastermind known only as \"The Joker\" appears in Gotham, creating a new wave of chaos. Batman's struggle against The Joker becomes deeply personal, forcing him to \"confront everything he believes\" and improve his technology to stop him. A love triangle develops between Bruce Wayne, Dent, and Rachel Dawes.",
+            "Language": "English, Mandarin",
+            "Country": "United States, United Kingdom",
+            "Awards": "Won 2 Oscars. 164 wins & 165 nominations total",
+            "Poster": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_SX300.jpg",
+            "Ratings": [
+                {
+                    "Source": "Internet Movie Database",
+                    "Value": "9.0/10"
+                },
+                {
+                    "Source": "Rotten Tomatoes",
+                    "Value": "94%"
+                },
+                {
+                    "Source": "Metacritic",
+                    "Value": "84/100"
+                }
+            ],
+            "Metascore": "84",
+            "imdbRating": "9.0",
+            "imdbVotes": "2,997,696",
+            "imdbID": "tt0468569",
+            "Type": "movie",
+            "DVD": "N/A",
+            "BoxOffice": "$534,987,076",
+            "Production": "N/A",
+            "Website": "N/A",
+            "Response": "True"
+        }
+    },
+    {
+        "title": "Fight Club",
+        "year": "1999",
+        "data": {
+            "Title": "Fight Club",
+            "Year": "1999",
+            "Rated": "R",
+            "Released": "15 Oct 1999",
+            "Runtime": "139 min",
+            "Genre": "Drama",
+            "Director": "David Fincher",
+            "Writer": "Chuck Palahniuk, Jim Uhls",
+            "Actors": "Brad Pitt, Edward Norton, Meat Loaf",
+            "Plot": "A nameless first person narrator (Edward Norton) attends support groups in attempt to subdue his emotional state and relieve his insomniac state. When he meets Marla (Helena Bonham Carter), another fake attendee of support groups, his life seems to become a little more bearable. However when he associates himself with Tyler (Brad Pitt) he is dragged into an underground fight club and soap making scheme. Together the two men spiral out of control and engage in competitive rivalry for love and power.",
+            "Language": "English",
+            "Country": "Germany, United States",
+            "Awards": "Nominated for 1 Oscar. 12 wins & 38 nominations total",
+            "Poster": "https://m.media-amazon.com/images/M/MV5BOTgyOGQ1NDItNGU3Ny00MjU3LTg2YWEtNmEyYjBiMjI1Y2M5XkEyXkFqcGc@._V1_SX300.jpg",
+            "Ratings": [
+                {
+                    "Source": "Internet Movie Database",
+                    "Value": "8.8/10"
+                },
+                {
+                    "Source": "Rotten Tomatoes",
+                    "Value": "81%"
+                },
+                {
+                    "Source": "Metacritic",
+                    "Value": "67/100"
+                }
+            ],
+            "Metascore": "67",
+            "imdbRating": "8.8",
+            "imdbVotes": "2,441,943",
+            "imdbID": "tt0137523",
+            "Type": "movie",
+            "DVD": "N/A",
+            "BoxOffice": "$37,030,102",
+            "Production": "N/A",
+            "Website": "N/A",
+            "Response": "True"
+        }
+    },
+    {
+        "title": "Forrest Gump",
+        "year": "1994",
+        "data": {
+            "Title": "Forrest Gump",
+            "Year": "1994",
+            "Rated": "PG-13",
+            "Released": "06 Jul 1994",
+            "Runtime": "142 min",
+            "Genre": "Drama, Romance",
+            "Director": "Robert Zemeckis",
+            "Writer": "Winston Groom, Eric Roth",
+            "Actors": "Tom Hanks, Robin Wright, Gary Sinise",
+            "Plot": "Forrest Gump is a simple man with a low I.Q. but good intentions. He is running through childhood with his best and only friend Jenny. His 'mama' teaches him the ways of life and leaves him to choose his destiny. Forrest joins the army for service in Vietnam, finding new friends called Dan and Bubba, he wins medals, creates a famous shrimp fishing fleet, inspires people to jog, starts a ping-pong craze, creates the smiley, writes bumper stickers and songs, donates to people and meets the president several times. However, this is all irrelevant to Forrest who can only think of his childhood sweetheart Jenny Curran, who has messed up her life. Although in the end all he wants to prove is that anyone can love anyone.",
+            "Language": "English",
+            "Country": "United States",
+            "Awards": "Won 6 Oscars. 51 wins & 74 nominations total",
+            "Poster": "https://m.media-amazon.com/images/M/MV5BNDYwNzVjMTItZmU5YS00YjQ5LTljYjgtMjY2NDVmYWMyNWFmXkEyXkFqcGc@._V1_SX300.jpg",
+            "Ratings": [
+                {
+                    "Source": "Internet Movie Database",
+                    "Value": "8.8/10"
+                },
+                {
+                    "Source": "Rotten Tomatoes",
+                    "Value": "75%"
+                },
+                {
+                    "Source": "Metacritic",
+                    "Value": "82/100"
+                }
+            ],
+            "Metascore": "82",
+            "imdbRating": "8.8",
+            "imdbVotes": "2,368,927",
+            "imdbID": "tt0109830",
+            "Type": "movie",
+            "DVD": "N/A",
+            "BoxOffice": "$330,455,270",
+            "Production": "N/A",
+            "Website": "N/A",
+            "Response": "True"
+        }
+    },
+    {
+        "title": "The Matrix",
+        "year": "1999",
+        "data": {
+            "Title": "The Matrix",
+            "Year": "1999",
+            "Rated": "R",
+            "Released": "31 Mar 1999",
+            "Runtime": "136 min",
+            "Genre": "Action, Sci-Fi",
+            "Director": "Lana Wachowski, Lilly Wachowski",
+            "Writer": "Lilly Wachowski, Lana Wachowski",
+            "Actors": "Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss",
+            "Plot": "Thomas A. Anderson is a man living two lives. By day he is an average computer programmer and by night a hacker known as Neo. Neo has always questioned his reality, but the truth is far beyond his imagination. Neo finds himself targeted by the police when he is contacted by Morpheus, a legendary computer hacker branded a terrorist by the government. As a rebel against the machines, Neo must confront the agents: super-powerful computer programs devoted to stopping Neo and the entire human rebellion.",
+            "Language": "English",
+            "Country": "United States, Australia",
+            "Awards": "Won 4 Oscars. 42 wins & 52 nominations total",
+            "Poster": "https://m.media-amazon.com/images/M/MV5BN2NmN2VhMTQtMDNiOS00NDlhLTliMjgtODE2ZTY0ODQyNDRhXkEyXkFqcGc@._V1_SX300.jpg",
+            "Ratings": [
+                {
+                    "Source": "Internet Movie Database",
+                    "Value": "8.7/10"
+                },
+                {
+                    "Source": "Rotten Tomatoes",
+                    "Value": "83%"
+                },
+                {
+                    "Source": "Metacritic",
+                    "Value": "73/100"
+                }
+            ],
+            "Metascore": "73",
+            "imdbRating": "8.7",
+            "imdbVotes": "2,147,060",
+            "imdbID": "tt0133093",
+            "Type": "movie",
+            "DVD": "N/A",
+            "BoxOffice": "$172,076,928",
+            "Production": "N/A",
+            "Website": "N/A",
+            "Response": "True"
+        }
+    },
+    {
+        "title": "Goodfellas",
+        "year": "1990",
+        "data": {
+            "Title": "Goodfellas",
+            "Year": "1990",
+            "Rated": "R",
+            "Released": "21 Sep 1990",
+            "Runtime": "145 min",
+            "Genre": "Biography, Crime, Drama",
+            "Director": "Martin Scorsese",
+            "Writer": "Nicholas Pileggi, Martin Scorsese",
+            "Actors": "Robert De Niro, Ray Liotta, Joe Pesci",
+            "Plot": "Henry Hill might be a small time gangster, who may have taken part in a robbery with Jimmy Conway and Tommy De Vito, two other gangsters who might have set their sights a bit higher. His two partners could kill off everyone else involved in the robbery, and slowly start to think about climbing up through the hierarchy of the Mob. Henry, however, might be badly affected by his partners' success, but will he consider stooping low enough to bring about the downfall of Jimmy and Tommy?",
+            "Language": "English, Italian, Hebrew, Yiddish",
+            "Country": "United States",
+            "Awards": "Won 1 Oscar. 45 wins & 38 nominations total",
+            "Poster": "https://m.media-amazon.com/images/M/MV5BN2E5NzI2ZGMtY2VjNi00YTRjLWI1MDUtZGY5OWU1MWJjZjRjXkEyXkFqcGc@._V1_SX300.jpg",
+            "Ratings": [
+                {
+                    "Source": "Internet Movie Database",
+                    "Value": "8.7/10"
+                },
+                {
+                    "Source": "Rotten Tomatoes",
+                    "Value": "94%"
+                },
+                {
+                    "Source": "Metacritic",
+                    "Value": "92/100"
+                }
+            ],
+            "Metascore": "92",
+            "imdbRating": "8.7",
+            "imdbVotes": "1,319,523",
+            "imdbID": "tt0099685",
+            "Type": "movie",
+            "DVD": "N/A",
+            "BoxOffice": "$46,909,721",
+            "Production": "N/A",
+            "Website": "N/A",
+            "Response": "True"
+        }
+    },
+    {
+        "title": "The Godfather",
+        "year": "1972",
+        "data": {
+            "Title": "The Godfather",
+            "Year": "1972",
+            "Rated": "R",
+            "Released": "24 Mar 1972",
+            "Runtime": "175 min",
+            "Genre": "Crime, Drama",
+            "Director": "Francis Ford Coppola",
+            "Writer": "Mario Puzo, Francis Ford Coppola",
+            "Actors": "Marlon Brando, Al Pacino, James Caan",
+            "Plot": "The Godfather \"Don\" Vito Corleone is the head of the Corleone mafia family in New York. He is at the event of his daughter's wedding. Michael, Vito's youngest son and a decorated WW II Marine is also present at the wedding. Michael seems to be uninterested in being a part of the family business. Vito is a powerful man, and is kind to all those who give him respect but is ruthless against those who do not. But when a powerful and treacherous rival wants to sell drugs and needs the Don's influence for the same, Vito refuses to do it. What follows is a clash between Vito's fading old values and the new ways which may cause Michael to do the thing he was most reluctant in doing and wage a mob war against all the other mafia families which could tear the Corleone family apart.",
+            "Language": "English, Italian, Latin",
+            "Country": "United States",
+            "Awards": "Won 3 Oscars. 31 wins & 31 nominations total",
+            "Poster": "https://m.media-amazon.com/images/M/MV5BNGEwYjgwOGQtYjg5ZS00Njc1LTk2ZGEtM2QwZWQ2NjdhZTE5XkEyXkFqcGc@._V1_SX300.jpg",
+            "Ratings": [
+                {
+                    "Source": "Internet Movie Database",
+                    "Value": "9.2/10"
+                },
+                {
+                    "Source": "Rotten Tomatoes",
+                    "Value": "97%"
+                },
+                {
+                    "Source": "Metacritic",
+                    "Value": "100/100"
+                }
+            ],
+            "Metascore": "100",
+            "imdbRating": "9.2",
+            "imdbVotes": "2,108,592",
+            "imdbID": "tt0068646",
+            "Type": "movie",
+            "DVD": "N/A",
+            "BoxOffice": "$136,381,073",
+            "Production": "N/A",
+            "Website": "N/A",
+            "Response": "True"
+        }
+    },
+    {
+        "title": "Schindler's List",
+        "year": "1993",
+        "data": {
+            "Title": "Schindler's List",
+            "Year": "1993",
+            "Rated": "R",
+            "Released": "04 Feb 1994",
+            "Runtime": "195 min",
+            "Genre": "Biography, Drama, History",
+            "Director": "Steven Spielberg",
+            "Writer": "Thomas Keneally, Steven Zaillian",
+            "Actors": "Liam Neeson, Ralph Fiennes, Ben Kingsley",
+            "Plot": "Oskar Schindler is a vain and greedy German businessman who becomes an unlikely humanitarian amid the barbaric German Nazi reign when he feels compelled to turn his factory into a refuge for Jews. Based on the true story of Oskar Schindler who managed to save about 1100 Jews from being gassed at the Auschwitz concentration camp, it is a testament to the good in all of us.",
+            "Language": "English, Hebrew, German, Polish, Latin",
+            "Country": "United States",
+            "Awards": "Won 7 Oscars. 91 wins & 49 nominations total",
+            "Poster": "https://m.media-amazon.com/images/M/MV5BNjM1ZDQxYWUtMzQyZS00MTE1LWJmZGYtNGUyNTdlYjM3ZmVmXkEyXkFqcGc@._V1_SX300.jpg",
+            "Ratings": [
+                {
+                    "Source": "Internet Movie Database",
+                    "Value": "9.0/10"
+                },
+                {
+                    "Source": "Rotten Tomatoes",
+                    "Value": "98%"
+                },
+                {
+                    "Source": "Metacritic",
+                    "Value": "95/100"
+                }
+            ],
+            "Metascore": "95",
+            "imdbRating": "9.0",
+            "imdbVotes": "1,517,035",
+            "imdbID": "tt0108052",
+            "Type": "movie",
+            "DVD": "N/A",
+            "BoxOffice": "$96,898,818",
+            "Production": "N/A",
+            "Website": "N/A",
+            "Response": "True"
+        }
+    }
+]

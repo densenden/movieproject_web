@@ -65,6 +65,7 @@ class Movie(db.Model):
                               backref=db.backref('movies', lazy=True))
     categories = db.relationship('Category', secondary='movie_categories', lazy='dynamic',
                                backref=db.backref('movies', lazy=True))
+    omdb_data = db.relationship("MovieOMDB", back_populates="movie", uselist=False)
 
 class UserFavorite(db.Model):
     """
