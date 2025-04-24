@@ -43,7 +43,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     whatsapp_number = db.Column(db.String(20))
-    description = db.Column(db.Text)
+    description = db.Column(db.Text, nullable=True)
     avatar_id = db.Column(db.Integer, db.ForeignKey('avatars.id'))
     favorites = db.relationship('UserFavorite', backref='user', lazy=True)
     avatar = db.relationship('Avatar', backref='users')
@@ -129,7 +129,11 @@ class Category(db.Model):
     @property
     def img_url(self):
         """Returns the full path for the category image"""
-        return f"static/categories/{self.img}" if self.img else None
+        if not self.img:
+            return None
+        # Remove any leading static/categories/ if present
+        img_path = self.img.replace('static/categories/', '')
+        return f"static/categories/{img_path}"
 
 class MovieCategory(db.Model):
     """

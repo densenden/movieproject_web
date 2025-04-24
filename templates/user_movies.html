@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.name }}'s Movies - MovieWeb{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{{ user.name }}'s Movies</h1>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="row">
+        {% for favorite in user.favorites %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                {% if favorite.movie.omdb_data and favorite.movie.omdb_data.poster %}
+                <img src="{{ url_for('static', filename=favorite.movie.omdb_data.poster) }}" class="card-img-top" alt="{{ favorite.movie.title }}">
+                {% else %}
+                <img src="{{ url_for('static', filename='movies/no-poster.jpg') }}" class="card-img-top" alt="No Poster">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ favorite.movie.title }}</h5>
+                    <p class="card-text">
+                        <strong>Status:</strong> {% if favorite.watched %}Watched{% else %}Not watched{% endif %}<br>
+                        {% if favorite.rating %}
+                        <strong>Rating:</strong> {{ favorite.rating }}/10<br>
+                        {% endif %}
+                        {% if favorite.comment %}
+                        <strong>Comment:</strong> {{ favorite.comment }}
+                        {% endif %}
+                    </p>
+                    <div class="btn-group">
+                        <a href="{{ url_for('update_movie', user_id=user.id, movie_id=favorite.movie_id) }}" class="btn btn-primary">Edit</a>
+                        <form action="{{ url_for('delete_movie', user_id=user.id, movie_id=favorite.movie_id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to remove this movie?')">Remove</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="mt-4">
+        <a href="{{ url_for('add_movie', user_id=user.id) }}" class="btn btn-success">Add Movie</a>
+        <a href="{{ url_for('users') }}" class="btn btn-secondary">Back to Users</a>
+    </div>
+</div>
+{% endblock %} 

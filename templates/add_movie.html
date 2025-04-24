@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Add Movie - MovieWeb{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Add Movie to Favorites</h1>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <form method="POST" class="mt-4">
+        <div class="form-group">
+            <label for="movie_id">Select Movie</label>
+            <select class="form-control" id="movie_id" name="movie_id" required>
+                <option value="">Please select a movie</option>
+                {% for movie in movies %}
+                <option value="{{ movie.id }}">{{ movie.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="watched" name="watched">
+                <label class="custom-control-label" for="watched">Movie already watched</label>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="rating">Rating (1-10)</label>
+            <input type="number" class="form-control" id="rating" name="rating" min="1" max="10" step="0.1">
+        </div>
+        
+        <div class="form-group">
+            <label for="comment">Comment</label>
+            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+        </div>
+        
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Add Movie</button>
+            <a href="{{ url_for('user_movies', user_id=user_id) }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %} 

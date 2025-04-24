@@ -1,192 +1,209 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SenFlix</title>
-    <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
-    <style>
-        .movie-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1.5rem;
-            padding: 2rem;
-            perspective: 1000px;
-        }
+{% extends "base.html" %}
 
-        .movie-grid-container {
-            overflow: hidden;
-            position: relative;
-            height: 65vh;
-        }
+{% block title %}Home - MovieWeb{% endblock %}
 
-        .movie-grid-wrapper {
-            display: flex;
-            transition: transform 0.5s ease;
-        }
+{% block head %}
+<style>
+    .movie-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+        padding: 2rem;
+        perspective: 1000px;
+    }
 
-        .movie-grid-page {
-            min-width: 100%;
-            flex-shrink: 0;
-        }
+    .movie-grid-container {
+        overflow: hidden;
+        position: relative;
+        height: 65vh;
+    }
 
-        .movie-card {
-            position: relative;
-            aspect-ratio: 2/3;
-            border-radius: 0.75rem;
-            overflow: hidden;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px) saturate(180%);
-            -webkit-backdrop-filter: blur(12px) saturate(180%);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transform-style: preserve-3d;
-            transform: translateZ(0);
-        }
+    .movie-grid-wrapper {
+        display: flex;
+        transition: transform 0.5s ease;
+    }
 
-        .movie-poster {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: opacity 0.3s ease;
-        }
+    .movie-grid-page {
+        min-width: 100%;
+        flex-shrink: 0;
+    }
 
-        .movie-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
+    .movie-card {
+        position: relative;
+        aspect-ratio: 2/3;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transform-style: preserve-3d;
+        transform: translateZ(0);
+    }
 
-        .movie-card:hover .movie-overlay {
-            opacity: 1;
-        }
+    .movie-poster {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity 0.3s ease;
+    }
 
-        .movie-card:hover .movie-poster {
-            opacity: 0.2;
-        }
+    .movie-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
 
-        .movie-info {
-            color: white;
-            transform: translateZ(20px);
-        }
+    .movie-card:hover .movie-overlay {
+        opacity: 1;
+    }
 
-        .movie-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            color: rgba(255, 255, 255, 0.95);
-        }
+    .movie-card:hover .movie-poster {
+        opacity: 0.2;
+    }
 
-        .movie-meta {
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 0.5rem;
-        }
+    .movie-info {
+        color: white;
+        transform: translateZ(20px);
+    }
 
-        .movie-details {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 0.5rem;
-        }
+    .movie-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        color: rgba(255, 255, 255, 0.95);
+    }
 
-        .movie-watchers {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.6);
-            margin-top: auto;
-        }
+    .movie-meta {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 0.5rem;
+    }
 
-        .category-hero {
-            height: 42vh;
-            overflow: hidden;
-            position: relative;
-        }
+    .movie-details {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 0.5rem;
+    }
 
-        .category-hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 40%;
-            background: linear-gradient(to bottom, transparent, var(--background-color, #121212));
-            pointer-events: none;
-        }
+    .movie-watchers {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: auto;
+    }
 
-        .category-content {
-            position: relative;
-            margin-top: -20vh;
-            padding-top: 2rem;
-            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.8) 35%, var(--background-color, #121212) 100%);
-        }
+    .category-hero {
+        height: 42vh;
+        overflow: hidden;
+        position: relative;
+    }
 
-        .category-title {
-            font-size: 5rem;
-            font-weight: 800;
-            line-height: 1;
-            padding: 0 2rem;
-            margin-bottom: 2rem;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-            color: rgba(255, 255, 255, 0.95);
-        }
+    .category-hero::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 40%;
+        background: linear-gradient(to bottom, transparent, var(--background-color, #121212));
+        pointer-events: none;
+    }
 
-        .sidebar {
-            transition: transform 0.3s ease;
-        }
+    .category-content {
+        position: relative;
+        margin-top: -20vh;
+        padding-top: 2rem;
+        background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.8) 35%, var(--background-color, #121212) 100%);
+    }
 
-        .sidebar.hidden {
-            transform: translateX(-100%);
-        }
-    </style>
-</head>
-<body class="bg-background text-text-primary" style="--background-color: #121212;">
-    <!-- Sidebar -->
-    <aside class="sidebar fixed left-0 top-0 w-60 h-full bg-surface-dark p-4 z-50">
-        <h1 class="text-2xl font-bold text-accent mb-8">SenFlix</h1>
-        <nav>
-            <ul id="category-nav">
-                {% for category in categories %}
-                <li>
-                    <a href="#category-{{ category.id }}" 
-                       class="block py-2 hover:text-accent cursor-pointer transition-colors">
-                        {{ category.name }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-        </nav>
-    </aside>
+    .category-title {
+        font-size: 5rem;
+        font-weight: 800;
+        line-height: 1;
+        padding: 0 2rem;
+        margin-bottom: 2rem;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+        color: rgba(255, 255, 255, 0.95);
+    }
 
-    <!-- Main Content -->
-    <main class="main-content ml-60 snap-y snap-mandatory h-screen overflow-y-auto" id="main-content">
-        {% for category in categories %}
-        <section id="category-{{ category.id }}" class="snap-start h-screen relative">
-            <!-- Hero Section -->
-            <div class="category-hero">
-                <div class="absolute inset-0 will-change-transform">
-                    <img src="{{ category.img }}" 
-                         alt="{{ category.name }}" 
-                         class="w-full h-full object-cover hero-image transform">
-                </div>
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 240px;
+        height: 100vh;
+        background-color: var(--surface-dark);
+        padding: 1rem;
+        z-index: 50;
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.hidden {
+        transform: translateX(-100%);
+    }
+
+    .main-content {
+        margin-left: 240px;
+        transition: margin-left 0.3s ease;
+    }
+
+    .main-content.full-width {
+        margin-left: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Sidebar -->
+<aside class="sidebar">
+    <h1 class="text-2xl font-bold text-accent mb-8">MovieWeb</h1>
+    <nav>
+        <ul id="category-nav">
+            {% for category in categories %}
+            <li>
+                <a href="#category-{{ category.id }}" 
+                   class="block py-2 hover:text-accent cursor-pointer transition-colors">
+                    {{ category.name }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+</aside>
+
+<!-- Main Content -->
+<main class="main-content snap-y snap-mandatory h-screen overflow-y-auto" id="main-content">
+    {% for category in categories %}
+    <section id="category-{{ category.id }}" class="snap-start h-screen relative">
+        <!-- Hero Section -->
+        <div class="category-hero">
+            <div class="absolute inset-0 will-change-transform">
+                <img src="{{ category.img_url }}" 
+                     alt="{{ category.name }}" 
+                     class="w-full h-full object-cover hero-image transform">
             </div>
+        </div>
 
-            <!-- Category Content -->
-            <div class="category-content">
-                <h2 class="category-title">{{ category.name }}</h2>
+        <!-- Category Content -->
+        <div class="category-content">
+            <h2 class="category-title">{{ category.name }}</h2>
 
-                <!-- Movie Grid -->
-                <div class="movie-grid-container">
-                    <div class="movie-grid-wrapper">
-                        <div class="movie-grid-page">
-                            <div class="movie-grid">
-                                {% for movie in category.movies %}
-                                <div class="movie-card">
+            <!-- Movie Grid -->
+            <div class="movie-grid-container">
+                <div class="movie-grid-wrapper">
+                    <div class="movie-grid-page">
+                        <div class="movie-grid">
+                            {% for movie in category.movies %}
+                            <div class="movie-card">
+                                <a href="{{ url_for('movie_details', movie_id=movie.id) }}" class="text-decoration-none">
                                     <img src="{{ movie.poster_url }}" alt="{{ movie.title }}" class="movie-poster">
                                     <div class="movie-overlay">
                                         <div class="movie-info">
@@ -211,12 +228,13 @@
                                             </div>
                                             {% endif %}
                                             <div class="movie-watchers">
-                                                {% if movie.favorites %}
+                                                {% if movie.user_data %}
                                                 <div class="font-medium">Watched by:</div>
                                                 <div class="flex flex-wrap gap-1 mt-1">
-                                                    {% for fav in movie.favorites if fav.watched %}
+                                                    {% for user_review in movie.user_data if user_review.watched %}
+                                                    {% set user = get_user(user_review.user_id) %}
                                                     <span class="px-2 py-1 bg-surface-dark rounded-full text-xs">
-                                                        {{ fav.user.name }}
+                                                        {{ user.name if user else 'Unknown User' }}
                                                     </span>
                                                     {% endfor %}
                                                 </div>
@@ -224,206 +242,29 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                {% endfor %}
+                                </a>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
-
-                    <!-- Grid Navigation -->
-                    <button class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-background/80 p-3 rounded-full hover:bg-background z-10">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-                    <button class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-background/80 p-3 rounded-full hover:bg-background z-10">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
                 </div>
+
+                <!-- Grid Navigation -->
+                <button class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-background/80 p-3 rounded-full hover:bg-background z-10">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-background/80 p-3 rounded-full hover:bg-background z-10">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
             </div>
-        </section>
-        {% endfor %}
-    </main>
-
-    <script>
-        // Auto-hide sidebar
-        let mouseMoveTimeout;
-        const sidebar = document.querySelector('.sidebar');
-        const mainContent = document.getElementById('main-content');
-        
-        function hideSidebar() {
-            sidebar.classList.add('hidden');
-            mainContent.classList.remove('ml-60');
-            mainContent.classList.add('w-full');
-        }
-        
-        function showSidebar() {
-            sidebar.classList.remove('hidden');
-            mainContent.classList.add('ml-60');
-            mainContent.classList.remove('w-full');
-        }
-        
-        document.addEventListener('mousemove', (e) => {
-            if (e.clientX < 60) {
-                showSidebar();
-                clearTimeout(mouseMoveTimeout);
-            } else {
-                clearTimeout(mouseMoveTimeout);
-                mouseMoveTimeout = setTimeout(hideSidebar, 5000);
-            }
-        });
-        document.addEventListener('scroll', () => {
-            showSidebar();
-            clearTimeout(mouseMoveTimeout);
-            mouseMoveTimeout = setTimeout(hideSidebar, 5000);
-        }, true);
-
-        // Smooth scroll for hero images
-        const heroes = document.querySelectorAll('.hero-image');
-        
-        mainContent.addEventListener('scroll', () => {
-            heroes.forEach(hero => {
-                const section = hero.closest('section');
-                const rect = section.getBoundingClientRect();
-                const scrollProgress = rect.top / window.innerHeight;
-                const translateY = Math.min(100, Math.max(-100, scrollProgress * 50));
-                hero.style.transform = `translateY(${translateY}px)`;
-            });
-        });
-
-        // Highlight active category
-        function updateActiveCategory() {
-            const sections = document.querySelectorAll('section');
-            const navItems = document.querySelectorAll('#category-nav a');
-            
-            sections.forEach((section, index) => {
-                const rect = section.getBoundingClientRect();
-                if (rect.top <= 100 && rect.bottom >= 100) {
-                    navItems.forEach(item => item.classList.remove('text-accent'));
-                    navItems[index].classList.add('text-accent');
-                }
-            });
-        }
-
-        mainContent.addEventListener('scroll', updateActiveCategory);
-        updateActiveCategory();
-
-        // Grid Navigation
-        document.querySelectorAll('.movie-grid-container').forEach(container => {
-            const wrapper = container.querySelector('.movie-grid-wrapper');
-            const prevBtn = container.querySelector('button:first-of-type');
-            const nextBtn = container.querySelector('button:last-of-type');
-            let currentPage = 0;
-            
-            function updateNavigation() {
-                const gridWidth = wrapper.scrollWidth;
-                const containerWidth = container.clientWidth;
-                const maxPages = Math.ceil(gridWidth / containerWidth) - 1;
-                
-                prevBtn.style.display = currentPage === 0 ? 'none' : 'block';
-                nextBtn.style.display = currentPage >= maxPages ? 'none' : 'block';
-            }
-            
-            prevBtn.addEventListener('click', () => {
-                if (currentPage > 0) {
-                    currentPage--;
-                    wrapper.style.transform = `translateX(-${currentPage * 100}%)`;
-                    updateNavigation();
-                }
-            });
-            
-            nextBtn.addEventListener('click', () => {
-                const gridWidth = wrapper.scrollWidth;
-                const containerWidth = container.clientWidth;
-                const maxPages = Math.ceil(gridWidth / containerWidth) - 1;
-                
-                if (currentPage < maxPages) {
-                    currentPage++;
-                    wrapper.style.transform = `translateX(-${currentPage * 100}%)`;
-                    updateNavigation();
-                }
-            });
-            
-            // Initial navigation update
-            updateNavigation();
-            
-            // Update navigation on window resize
-            window.addEventListener('resize', updateNavigation);
-        });
-
-        // 3D Card Tilt Effect
-        document.querySelectorAll('.movie-card').forEach(card => {
-            let bounds;
-            let glareAngle = 125; // Startwinkel des Glanzes
-
-            function rotateToMouse(e) {
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                const leftX = mouseX - bounds.x;
-                const topY = mouseY - bounds.y;
-                const center = {
-                    x: leftX - bounds.width / 2,
-                    y: topY - bounds.height / 2
-                }
-                const distance = Math.sqrt(center.x**2 + center.y**2);
-                
-                // Berechne Rotationswinkel
-                const rotateX = -center.y / 20;
-                const rotateY = center.x / 20;
-                
-                // Berechne Glanzwinkel basierend auf der Mausposition
-                glareAngle = 125 + (rotateY * 2);
-                
-                card.style.transform = `
-                    perspective(1000px)
-                    rotateX(${rotateX}deg)
-                    rotateY(${rotateY}deg)
-                    translateY(-4px)
-                    scale(1.02)
-                `;
-                
-                // Aktualisiere den Glanzeffekt
-                const glareOpacity = Math.min(distance / bounds.width, 0.5);
-                card.style.setProperty('--glare-opacity', glareOpacity);
-                card.querySelector('.movie-card-content').style.transform = `translateZ(20px)`;
-                card.style.setProperty('--glare-angle', `${glareAngle}deg`);
-                
-                // Aktualisiere den Gradient
-                card.style.background = `
-                    linear-gradient(
-                        ${glareAngle}deg,
-                        rgba(255,255,255,${glareOpacity * 0.4}) 0%,
-                        rgba(255,255,255,0) 65%
-                    ),
-                    rgba(255,255,255,0.15)
-                `;
-            }
-
-            function resetStyles() {
-                card.style.transform = '';
-                card.style.background = '';
-                card.querySelector('.movie-card-content').style.transform = '';
-                // Die Opacity wird durch CSS-Transition langsam ausgeblendet
-            }
-
-            card.addEventListener('mouseenter', () => {
-                bounds = card.getBoundingClientRect();
-                document.addEventListener('mousemove', rotateToMouse);
-                // Setze die schnelle Transition für das Einblenden
-                card.style.transition = 'transform 0.2s ease-out, box-shadow 0.2s ease-out, background 0.2s ease-out';
-            });
-
-            card.addEventListener('mouseleave', () => {
-                document.removeEventListener('mousemove', rotateToMouse);
-                // Setze die langsame Transition für das Ausblenden
-                card.style.transition = 'transform 0.2s ease-out, box-shadow 0.2s ease-out, background 3s ease-out';
-                resetStyles();
-            });
-        });
-    </script>
-</body>
-</html>
+        </div>
+    </section>
+    {% endfor %}
+</main>
+{% endblock %}
 
 
